@@ -1,24 +1,34 @@
+# Logs
 *.log
-.DS_Store
+/storage/logs/*.log
+
+# Dependencies
+/node_modules
+/vendor
+
+# Development
 .env
 .env.backup
-.env.production
-.phpactor.json
 .phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
 Homestead.json
 Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# IDEs
+.idea
+.vscode
+.fleet
+
+# Compiled files
+/public/hot
+/public/storage
+/storage/app/public
+/storage/framework/cache/data
+/storage/framework/sessions
+/storage/framework/testing
+/storage/framework/views
+
+# Other
+.DS_Store
 Thumbs.db
