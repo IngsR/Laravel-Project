@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('/admin/register', [\App\Http\Controllers\Auth\AdminRegistrationController::class, 'create'])->name('admin.register');
+Route::post('/admin/register', [\App\Http\Controllers\Auth\AdminRegistrationController::class, 'store']);
+
 Route::get('/debug-users-schema', function () {
     $schema = Illuminate\Support\Facades\Schema::getColumnListing('users');
     return response()->json($schema);

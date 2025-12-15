@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
-class RegisteredUserController extends Controller
+class AdminRegistrationController extends Controller
 {
     /**
      * Display the registration view.
      */
-    public function create(): RedirectResponse
+    public function create(): View
     {
-        return redirect()->route('login', ['register' => true]);
+        return view('auth.admin-register');
     }
 
     /**
@@ -39,6 +39,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'is_admin' => true,
         ]);
 
         event(new Registered($user));

@@ -14,12 +14,26 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-        @include('layouts.navigation')
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+            @include('layouts.navigation')
 
-        <!-- Page Content -->
-        <main class="py-12">
-            @yield('content')
-        </main>
+            <!-- Page Content -->
+            <div class="p-4 sm:ml-64">
+                <div class="mt-14">
+                    <!-- Page Heading -->
+                    @if (isset($header))
+                        <header class="mb-6">
+                            {{ $header }}
+                        </header>
+                    @endif
+                    
+                    <!-- Main Content -->
+                    <main>
+                        {{ $slot }}
+                    </main>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

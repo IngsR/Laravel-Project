@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -32,9 +33,17 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required',
             'content' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        Post::create($request->all());
+        $data = $request->only('title', 'content');
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('posts', 'public');
+            $data['image'] = $path;
+        }
+
+        Post::create($data);
 
         return redirect()->route('posts.index')
             ->with('success', 'Post created successfully.');
@@ -64,9 +73,20 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required',
             'content' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $post->update($request->all());
+        $data = $request->only('title', 'content');
+
+        if ($request->hasFile('image')) {
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+            $path = $request->file('image')->store('posts', 'public');
+            $data['image'] = $path;
+        }
+
+        $post->update($data);
 
         return redirect()->route('posts.index')
             ->with('success', 'Post updated successfully');
@@ -77,6 +97,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
         $post->delete();
 
         return redirect()->route('posts.index')
