@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Services\CategoryService;
 
 class CategoryController extends Controller
 {
+    protected $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -27,14 +36,9 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
-            'description' => 'nullable|string',
-        ]);
-
-        Category::create($request->all());
+        Category::create($request->validated());
 
         return redirect()->route('categories.index')
                          ->with('success', 'Category created successfully.');
@@ -59,14 +63,9 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'description' => 'nullable|string',
-        ]);
-
-        $category->update($request->all());
+        $category->update($request->validated());
 
         return redirect()->route('categories.index')
                          ->with('success', 'Category updated successfully.');
@@ -77,15 +76,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        // Optional: Check if the category has associated products before deleting
-        if ($category->products()->count() > 0) {
+        try {
+            $this->categoryService->deleteCategory($category);
             return redirect()->route('categories.index')
-                             ->with('error', 'Cannot delete category because it has associated products.');
+                             ->with('success', 'Category deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('categories.index')
+                             ->with('error', $e->getMessage());
         }
-
-        $category->delete();
-
-        return redirect()->route('categories.index')
-                         ->with('success', 'Category deleted successfully.');
     }
 }

@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Services\PostService;
 
 class PostController extends Controller
 {
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -28,22 +36,12 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        $data = $request->only('title', 'content');
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('posts', 'public');
-            $data['image'] = $path;
-        }
-
-        Post::create($data);
+        $this->postService->createPost(
+            $request->except('image'),
+            $request->file('image')
+        );
 
         return redirect()->route('posts.index')
             ->with('success', 'Post created successfully.');
@@ -68,25 +66,13 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        $data = $request->only('title', 'content');
-
-        if ($request->hasFile('image')) {
-            if ($post->image) {
-                Storage::disk('public')->delete($post->image);
-            }
-            $path = $request->file('image')->store('posts', 'public');
-            $data['image'] = $path;
-        }
-
-        $post->update($data);
+        $this->postService->updatePost(
+            $post,
+            $request->except('image'),
+            $request->file('image')
+        );
 
         return redirect()->route('posts.index')
             ->with('success', 'Post updated successfully');
@@ -97,10 +83,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if ($post->image) {
-            Storage::disk('public')->delete($post->image);
-        }
-        $post->delete();
+        $this->postService->deletePost($post);
 
         return redirect()->route('posts.index')
             ->with('success', 'Post deleted successfully');

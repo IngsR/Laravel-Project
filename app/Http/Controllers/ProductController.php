@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Services\ProductService;
 
 class ProductController extends Controller
 {
+    protected $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -28,18 +37,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'sku' => 'required|string|unique:products,sku|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
-        ]);
-
-        Product::create($request->all());
+        $this->productService->createProduct($request->validated());
 
         return redirect()->route('products.index')
                          ->with('success', 'Product created successfully.');
@@ -65,18 +65,9 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
-        ]);
-
-        $product->update($request->all());
+        $this->productService->updateProduct($product, $request->validated());
 
         return redirect()->route('products.index')
                          ->with('success', 'Product updated successfully.');
@@ -87,7 +78,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product->delete();
+        $this->productService->deleteProduct($product);
 
         return redirect()->route('products.index')
                          ->with('success', 'Product deleted successfully.');
