@@ -17,9 +17,9 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): RedirectResponse
+    public function create(): View
     {
-        return redirect()->route('login', ['register' => true]);
+        return view('auth.register');
     }
 
     /**
