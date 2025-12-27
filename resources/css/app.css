@@ -1,3 +1,310 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ====================================
+   Custom Animations
+   ==================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse-subtle {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes bounce-subtle {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Animation utility classes */
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+}
+
+.animate-slide-down {
+    animation: slideDown 0.4s ease-out forwards;
+}
+
+.animate-pulse-subtle {
+    animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+.animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+/* Animation delays */
+.delay-75 {
+    animation-delay: 75ms;
+}
+.delay-100 {
+    animation-delay: 100ms;
+}
+.delay-150 {
+    animation-delay: 150ms;
+}
+.delay-200 {
+    animation-delay: 200ms;
+}
+.delay-300 {
+    animation-delay: 300ms;
+}
+.delay-500 {
+    animation-delay: 500ms;
+}
+
+/* ====================================
+   Custom Gradient Classes
+   ==================================== */
+.gradient-primary {
+    @apply bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500;
+}
+
+.gradient-success {
+    @apply bg-gradient-to-br from-green-400 via-emerald-500 to-teal-500;
+}
+
+.gradient-info {
+    @apply bg-gradient-to-br from-blue-400 via-cyan-500 to-teal-400;
+}
+
+.gradient-warning {
+    @apply bg-gradient-to-br from-yellow-400 via-orange-500 to-red-400;
+}
+
+.gradient-purple {
+    @apply bg-gradient-to-br from-purple-500 via-violet-500 to-indigo-600;
+}
+
+.gradient-blue {
+    @apply bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600;
+}
+
+.gradient-green {
+    @apply bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600;
+}
+
+.gradient-orange {
+    @apply bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-500;
+}
+
+/* ====================================
+   Card Styles
+   ==================================== */
+.card {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-all duration-300;
+}
+
+.card-hover {
+    @apply hover:shadow-lg hover:-translate-y-1 hover:border-gray-200 dark:hover:border-gray-600;
+}
+
+.stat-card {
+    @apply relative overflow-hidden rounded-2xl p-6 text-white shadow-lg transition-all duration-300;
+}
+
+.stat-card:hover {
+    @apply shadow-2xl -translate-y-1;
+}
+
+.stat-card::before {
+    content: "";
+    @apply absolute inset-0 bg-white/10 opacity-0 transition-opacity duration-300;
+}
+
+.stat-card:hover::before {
+    @apply opacity-100;
+}
+
+/* ====================================
+   Button Enhancements
+   ==================================== */
+.btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg shadow-sm;
+    @apply hover:bg-indigo-700 hover:shadow-md hover:-translate-y-0.5;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+    @apply active:translate-y-0 transition-all duration-200;
+}
+
+.btn-success {
+    @apply inline-flex items-center justify-center px-4 py-2.5 bg-emerald-600 text-white font-semibold rounded-lg shadow-sm;
+    @apply hover:bg-emerald-700 hover:shadow-md hover:-translate-y-0.5;
+    @apply focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2;
+    @apply active:translate-y-0 transition-all duration-200;
+}
+
+.btn-danger {
+    @apply inline-flex items-center justify-center px-4 py-2.5 bg-red-600 text-white font-semibold rounded-lg shadow-sm;
+    @apply hover:bg-red-700 hover:shadow-md hover:-translate-y-0.5;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+    @apply active:translate-y-0 transition-all duration-200;
+}
+
+.btn-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg;
+    @apply hover:bg-gray-200 dark:hover:bg-gray-600 hover:-translate-y-0.5;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2;
+    @apply active:translate-y-0 transition-all duration-200;
+}
+
+/* ====================================
+   Table Enhancements
+   ==================================== */
+.table-modern {
+    @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+}
+
+.table-modern thead {
+    @apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
+}
+
+.table-modern tbody tr {
+    @apply bg-white dark:bg-gray-800 border-b dark:border-gray-700 transition-colors duration-150;
+}
+
+.table-modern tbody tr:hover {
+    @apply bg-gray-50 dark:bg-gray-700/50;
+}
+
+/* ====================================
+   Form Enhancements
+   ==================================== */
+.input-modern {
+    @apply block w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600;
+    @apply bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white;
+    @apply placeholder-gray-500 dark:placeholder-gray-400;
+    @apply focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+    @apply transition-all duration-200;
+}
+
+.input-modern:focus {
+    @apply bg-white dark:bg-gray-600;
+}
+
+/* ====================================
+   Alert/Toast Styles
+   ==================================== */
+.alert {
+    @apply flex items-center gap-3 p-4 rounded-xl border animate-slide-down;
+}
+
+.alert-success {
+    @apply bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300;
+}
+
+.alert-error {
+    @apply bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300;
+}
+
+.alert-warning {
+    @apply bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300;
+}
+
+.alert-info {
+    @apply bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300;
+}
+
+/* ====================================
+   Scrollbar Styling
+   ==================================== */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* ====================================
+   Glassmorphism Effect
+   ==================================== */
+.glass {
+    @apply bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg border border-white/20 dark:border-gray-700/50;
+}
+
+/* ====================================
+   Loading States
+   ==================================== */
+.skeleton {
+    @apply bg-gray-200 dark:bg-gray-700 rounded animate-pulse;
+}
+
+/* ====================================
+   Icon Container
+   ==================================== */
+.icon-container {
+    @apply flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm;
+}
