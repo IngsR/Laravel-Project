@@ -308,3 +308,40 @@
 .icon-container {
     @apply flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm;
 }
+
+/* ====================================
+   Navigation Styles
+   ==================================== */
+.nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-gray-600 dark:text-gray-300;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-700/50;
+    @apply transition-all duration-200 ease-out;
+}
+
+.nav-item-active {
+    @apply bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30;
+    @apply text-indigo-700 dark:text-indigo-300;
+    @apply border-l-2 border-indigo-500 -ml-0.5 pl-3.5;
+}
+
+.nav-icon {
+    @apply flex items-center justify-center w-9 h-9 rounded-lg;
+    @apply bg-gray-100 dark:bg-gray-700/50;
+    @apply text-gray-500 dark:text-gray-400;
+    @apply transition-all duration-200;
+}
+
+.nav-icon-active {
+    @apply bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-md;
+}
+
+.nav-text {
+    @apply text-sm font-medium;
+}
+
+/* Enhanced Glass Effect */
+.glass {
+    @apply bg-white/80 dark:bg-gray-900/80;
+    @apply backdrop-blur-xl;
+    @apply border-b border-gray-200/50 dark:border-gray-700/50;
+}
