@@ -7,9 +7,20 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $posts = Post::latest()->take(4)->get();
+    $posts = Post::latest()->take(6)->get();
     return view('welcome', compact('posts'));
 });
+
+// Public Blog Routes (no authentication required)
+Route::get('/blog', function () {
+    $posts = Post::latest()->paginate(9);
+    return view('blog.index', compact('posts'));
+})->name('blog.index');
+
+Route::get('/blog/{post}', function (Post $post) {
+    $relatedPosts = Post::where('id', '!=', $post->id)->latest()->take(3)->get();
+    return view('blog.show', compact('post', 'relatedPosts'));
+})->name('blog.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
