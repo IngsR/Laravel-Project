@@ -6,14 +6,24 @@ use App\Models\Product;
 
 class ProductService
 {
-    public function createProduct(array $data)
+    public function getPaginatedProducts(int $perPage = 5)
     {
-        return Product::create($data);
+        return Product::latest()->paginate($perPage);
     }
 
-    public function updateProduct(Product $product, array $data)
+    public function getAllCategories()
     {
-        $product->update($data);
+        return \App\Models\Category::all();
+    }
+
+    public function createProduct(\App\DTOs\Product\CreateProductDTO $dto)
+    {
+        return Product::create($dto->toArray());
+    }
+
+    public function updateProduct(Product $product, \App\DTOs\Product\UpdateProductDTO $dto)
+    {
+        $product->update($dto->toArray());
         return $product;
     }
 

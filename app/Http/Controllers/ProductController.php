@@ -21,7 +21,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->paginate(5);
+        $products = $this->productService->getPaginatedProducts(5);
         return view('products.index', compact('products'));
     }
 
@@ -30,7 +30,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = \App\Models\Category::all();
+        $categories = $this->productService->getAllCategories();
         return view('products.create', compact('categories'));
     }
 
@@ -39,7 +39,8 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $this->productService->createProduct($request->validated());
+        $dto = \App\DTOs\Product\CreateProductDTO::fromRequest($request->validated());
+        $this->productService->createProduct($dto);
 
         return redirect()->route('products.index')
                          ->with('success', 'Product created successfully.');
@@ -58,7 +59,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = \App\Models\Category::all();
+        $categories = $this->productService->getAllCategories();
         return view('products.edit', compact('product', 'categories'));
     }
 
@@ -67,7 +68,8 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $this->productService->updateProduct($product, $request->validated());
+        $dto = \App\DTOs\Product\UpdateProductDTO::fromRequest($request->validated());
+        $this->productService->updateProduct($product, $dto);
 
         return redirect()->route('products.index')
                          ->with('success', 'Product updated successfully.');
