@@ -8,23 +8,32 @@ use Illuminate\Support\Facades\Storage;
 
 class PostService
 {
-    public function createPost(array $data, $image = null)
+    public function getPaginatedPosts(int $perPage = 5)
     {
-        if ($image) {
-            $path = $image->store('posts', 'public');
+        return Post::latest()->paginate($perPage);
+    }
+
+    public function createPost(\App\DTOs\Post\CreatePostDTO $dto)
+    {
+        $data = $dto->toArray();
+
+        if ($dto->image) {
+            $path = $dto->image->store('posts', 'public');
             $data['image'] = $path;
         }
 
         return Post::create($data);
     }
 
-    public function updatePost(Post $post, array $data, $image = null)
+    public function updatePost(Post $post, \App\DTOs\Post\UpdatePostDTO $dto)
     {
-        if ($image) {
+        $data = $dto->toArray();
+
+        if ($dto->image) {
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
             }
-            $path = $image->store('posts', 'public');
+            $path = $dto->image->store('posts', 'public');
             $data['image'] = $path;
         }
 

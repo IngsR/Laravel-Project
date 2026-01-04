@@ -21,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate(5);
+        $posts = $this->postService->getPaginatedPosts(5);
         return view('posts.index', compact('posts'));
     }
 
@@ -38,10 +38,12 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $this->postService->createPost(
-            $request->except('image'),
+        $dto = \App\DTOs\Post\CreatePostDTO::fromRequest(
+            $request->validated(),
             $request->file('image')
         );
+
+        $this->postService->createPost($dto);
 
         return redirect()->route('posts.index')
             ->with('success', 'Post created successfully.');
@@ -68,11 +70,12 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        $this->postService->updatePost(
-            $post,
-            $request->except('image'),
+        $dto = \App\DTOs\Post\UpdatePostDTO::fromRequest(
+            $request->validated(),
             $request->file('image')
         );
+
+        $this->postService->updatePost($post, $dto);
 
         return redirect()->route('posts.index')
             ->with('success', 'Post updated successfully');

@@ -21,7 +21,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::latest()->paginate(10);
+        $categories = $this->categoryService->getPaginatedCategories(10);
         return view('categories.index', compact('categories'));
     }
 
@@ -38,7 +38,8 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        Category::create($request->validated());
+        $dto = \App\DTOs\Category\CreateCategoryDTO::fromRequest($request->validated());
+        $this->categoryService->createCategory($dto);
 
         return redirect()->route('categories.index')
                          ->with('success', 'Category created successfully.');
@@ -65,7 +66,8 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $category->update($request->validated());
+        $dto = \App\DTOs\Category\UpdateCategoryDTO::fromRequest($request->validated());
+        $this->categoryService->updateCategory($category, $dto);
 
         return redirect()->route('categories.index')
                          ->with('success', 'Category updated successfully.');
