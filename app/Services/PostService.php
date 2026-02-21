@@ -2,9 +2,14 @@
 
 namespace App\Services;
 
+
+// Import Model Post untuk interaksi dengan database
 use App\Models\Post;
+// Import LengthAwarePaginator untuk tipe data return pagination
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+// Import Model dasar Eloquent
 use Illuminate\Database\Eloquent\Model;
+// Import Facade Storage untuk operasi file system
 use Illuminate\Support\Facades\Storage;
 
 // Kelas Service untuk menangani logika bisnis terkait Postingan

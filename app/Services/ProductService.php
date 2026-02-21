@@ -2,10 +2,15 @@
 
 namespace App\Services;
 
+// Import Model Category untuk interaksi dengan database kategori
 use App\Models\Category;
+// Import Model Product untuk interaksi dengan database produk
 use App\Models\Product;
+// Import LengthAwarePaginator untuk tipe data return pagination
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+// Import Collection untuk tipe data return list/array
 use Illuminate\Database\Eloquent\Collection;
+// Import Model dasar Eloquent
 use Illuminate\Database\Eloquent\Model;
 
 // Kelas Service untuk menangani logika bisnis terkait Produk
@@ -33,8 +38,10 @@ class ProductService
     // @return Model Model produk yang baru dibuat
     public function createProduct(\App\DTOs\Product\CreateProductDTO $dto): Model
     {
-        // Membuat dan menyimpan data produk baru ke database menggunakan array dari DTO
-        return Product::create($dto->toArray());
+        // Mengubah objek DTO menjadi format array
+        $data = $dto->toArray();
+        // Membuat dan menyimpan data produk baru ke database menggunakan array tersebut
+        return Product::create($data);
     }
 
     // Memperbarui data produk yang sudah ada
@@ -43,8 +50,10 @@ class ProductService
     // @return Product Model produk yang telah diperbarui
     public function updateProduct(Product $product, \App\DTOs\Product\UpdateProductDTO $dto): Product
     {
-        // Melakukan update data pada instance produk dengan data dari DTO
-        $product->update($dto->toArray());
+        // Mengubah objek DTO menjadi format array
+        $data = $dto->toArray();
+        // Melakukan update data pada instance produk dengan data baru
+        $product->update($data);
         
         // Mengembalikan objek produk yang telah diperbarui
         return $product;

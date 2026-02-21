@@ -2,9 +2,13 @@
 
 namespace App\Services;
 
+// Import Model Category untuk interaksi dengan database
 use App\Models\Category;
+// Import LengthAwarePaginator untuk tipe data return pagination
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+// Import Model dasar Eloquent
 use Illuminate\Database\Eloquent\Model;
+// Import Exception untuk handling error
 use Exception;
 
 // Kelas Service untuk menangani logika bisnis terkait Kategori
@@ -15,7 +19,7 @@ class CategoryService
     // @return LengthAwarePaginator Objek paginator berisi data kategori
     public function getPaginatedCategories(int $perPage = 10): LengthAwarePaginator
     {
-        // Mengembalikan data kategori diurutkan dari yang terbaru dan dipag inasi
+        // Mengembalikan data kategori diurutkan dari yang terbaru dan dipag inasi sesuai limit
         return Category::latest()->paginate($perPage);
     }
 
@@ -24,8 +28,10 @@ class CategoryService
     // @return Model Model kategori yang baru dibuat
     public function createCategory(\App\DTOs\Category\CreateCategoryDTO $dto): Model
     {
-        // Membuat dan menyimpan data kategori baru ke database menggunakan array dari DTO
-        return Category::create($dto->toArray());
+        // Mengubah object DTO menjadi array agar bisa disimpan oleh Eloquent
+        $data = $dto->toArray();
+        // Membuat dan menyimpan data kategori baru ke database
+        return Category::create($data);
     }
 
     // Memperbarui data kategori yang sudah ada
@@ -34,8 +40,10 @@ class CategoryService
     // @return Category Model kategori yang telah diperbarui
     public function updateCategory(Category $category, \App\DTOs\Category\UpdateCategoryDTO $dto): Category
     {
-        // Melakukan update data pada instance kategori dengan data dari DTO
-        $category->update($dto->toArray());
+        // Mengubah object DTO menjadi array data
+        $data = $dto->toArray();
+        // Melakukan update data pada instance kategori dengan data baru
+        $category->update($data);
         
         // Mengembalikan objek kategori yang telah diperbarui
         return $category;
